@@ -1,17 +1,20 @@
-# Usa uma imagem oficial do Python
-FROM python:3.10-slim
+# Use a imagem completa do Python 3.13 para evitar erros de compilação
+FROM python:3.13
 
-# Define o diretório de trabalho dentro do container
+# Defina o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copia os arquivos para o container
+# Copie o arquivo de dependências
 COPY requirements.txt .
+
+# Instale as dependências
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copie todo o código do projeto para o contêiner
 COPY . .
 
-# Expõe a porta que a aplicação usará
-EXPOSE 5000
+# Exponha a porta que o servidor usará
+EXPOSE 8080
 
-# Comando para iniciar a aplicação
-CMD ["python", "app.py"]
+# Comando para iniciar o servidor, agora apontando para o 'servidor.py'
+CMD ["uvicorn", "servidor:mcp.streamable_http_app", "--host", "0.0.0.0", "--port", "8080"]
